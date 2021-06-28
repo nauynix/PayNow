@@ -23,13 +23,15 @@ app.get("/", (req, res) => {
 // Incase of blank in the index.ejs file, return error 
 // Error  - Empty Data!
 app.post("/scan", (req, res) => {
-    const url = req.body.url;
+    const paynow = require('paynow-generator').paynowGenerator
+    let url = paynow('mobile',req.body.number,'no',parseFloat(req.body.amount),'One Stop Films', ' ')
+    // let url = paynow('mobile','93530118','no',4.00,'One Stop Films', ' ')
 
     if (url.length === 0) res.send("Empty Data!");
     qr.toDataURL(url, (err, src) => {
         if (err) res.send("Error occured");
 
-        res.render("scan", { src });
+        res.render("scan", { url, src });
     });
 });
 
